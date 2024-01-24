@@ -92,6 +92,7 @@ class WarcServer(BaseWarcServer):
         self.default_access = self.config.get('default_access')
 
         self.rules_file = self.config.get('rules_file', '')
+        self.clearurls_file = self.config.get('clearurls_file', '')
 
         if 'certificates' in self.config:
             certs_config = self.config['certificates']
@@ -156,6 +157,7 @@ class WarcServer(BaseWarcServer):
 
         return DefaultResourceHandler(source, self.archive_paths,
                                       rules_file=self.rules_file,
+                                      clearurls_file=self.clearurls_file,
                                       access_checker=access_checker)
 
     def list_fixed_routes(self):
@@ -252,6 +254,7 @@ class WarcServer(BaseWarcServer):
 
         return DefaultResourceHandler(agg, archive_paths,
                                       rules_file=self.rules_file,
+                                      clearurls_file=self.clearurls_file,
                                       access_checker=access_checker)
 
     def init_sequence(self, coll_name, seq_config):

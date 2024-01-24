@@ -60,5 +60,6 @@ html_templates:
 enable_memento: true
 
 rules_config: pkg://pywb/rules.yaml
+clearurls_file: pkg://pywb/clearurls.json
 
 

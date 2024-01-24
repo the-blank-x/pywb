@@ -1,6 +1,9 @@
 from pywb.utils.wbexception import BadRequestException, WbException, AccessException
 from pywb.utils.wbexception import NotFoundException
 from pywb.utils.memento import MementoUtils
+from pywb.utils.loaders import load
+from pywb.utils.clearurls import parse_providers, clean
+from pywb import DEFAULT_CLEARURLS_FILE
 
 from warcio.recordloader import ArchiveLoadFailed
 
@@ -9,6 +12,7 @@ from pywb.warcserver.index.fuzzymatcher import FuzzyMatcher
 from pywb.warcserver.resource.responseloader import  WARCPathLoader, LiveWebLoader, VideoLoader
 
 import six
+import json
 import logging
 import traceback
 
@@ -51,6 +55,9 @@ class IndexHandler(object):
         self.fuzzy = FuzzyMatcher(kwargs.get('rules_file'))
         self.access_checker = kwargs.get('access_checker')
 
+        file = load(kwargs.get('clearurls_file') or DEFAULT_CLEARURLS_FILE)
+        self.clearurls_providers = parse_providers(json.load(file))
+
     def get_supported_modes(self):
         return dict(modes=['list_sources', 'index'])
 
@@ -59,6 +66,7 @@ class IndexHandler(object):
         if not url:
             errs = dict(last_exc=BadRequestException('The "url" param is required'))
             return None, errs
+        url = params['url'] = clean(self.clearurls_providers, url, True)
 
         input_req = params.get('_input_req')
         if input_req:

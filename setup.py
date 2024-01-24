@@ -72,7 +72,8 @@ def load_requirements(filename):
 def get_package_data():
     pkgs = ['static/*.*',
             'templates/*',
-            '*.yaml']
+            '*.yaml',
+            '*.json']
 
     for root, dirs, files in os.walk(os.path.join('pywb', 'static')):
         for dir_ in dirs:
