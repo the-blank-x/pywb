@@ -73,6 +73,8 @@ class BaseCli(object):
                             help='Enable partial wombat JS overrides support in proxy mode')
         parser.add_argument('--enable-auto-fetch', action='store_true',
                             help='Enable auto-fetch worker to capture resources from stylesheets, <img srcset> when running in live/recording mode')
+        parser.add_argument('--notify-systemd', action='store_true',
+                            help='Notify systemd when the server is up')
 
         self.desc = desc
         self.extra_config = {}
@@ -134,7 +136,8 @@ class BaseCli(object):
                           port=self.r.port,
                           hostname=self.r.bind,
                           handler_class=RequestURIWSGIHandler,
-                          direct=True)
+                          direct=True,
+                          notify_systemd=self.r.notify_systemd)
 
 
 #=============================================================================
